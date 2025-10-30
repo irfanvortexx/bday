@@ -61,40 +61,71 @@
         
         canvas {
             display: block;
+            width: 100vw;
+            height: 100vh;
         }
         
         #lyrics {
             position: absolute;
-            top: 50%;
+            top: 53%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            font-size: clamp(16px, 4vw, 30px);
+            font-size: clamp(12px, 3vw, 22px);
+            font-weight: 600;
             line-height: 1.4em;
-            text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
-            color: #fff0f7;
+            color: #fff;
+            width: 60%;
             opacity: 0;
-            transition: opacity 1s;
-            width: 70%;
-            max-width: 500px;
+            transition: opacity 0.6s ease;
+            text-shadow: 0 0 10px #ff80bf, 0 0 20px #ff4fa3;
+            filter: drop-shadow(0 0 4px #ff66b2);
             pointer-events: none;
-            filter: drop-shadow(0 0 8px #ff66b2);
+        }
+        
+        @media (max-width: 600px) {
+            #lyrics {
+                font-size: 3.5vw;
+                width: 80%;
+            }
         }
         
         #title {
             position: absolute;
-            top: 60px;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            width: 100%;
-            font-size: clamp(26px, 5vw, 42px);
+            font-size: clamp(24px, 5vw, 40px);
             text-shadow: 0 0 25px #ff85c2, 0 0 50px #ff3ea6;
+            animation: glow 3s infinite alternate ease-in-out;
+        }
+        
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 20px #ff66b2, 0 0 40px #ff3399;
+            }
+            100% {
+                text-shadow: 0 0 40px #ff99cc, 0 0 80px #ff4fa3;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            #lyrics {
+                font-size: 5vw;
+                width: 90%;
+            }
+            #title {
+                font-size: 6vw;
+                top: 25px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="intro">
-        <button id="startBtn">Start</button>
+        <button id="startBtn">Start 💖</button>
     </div>
 
     <div id="main" style="display:none;">
@@ -117,10 +148,9 @@
         const lyricsData = [{
             time: 0,
             text: "En viral irukudhu un viral kidakanum 🤝🏻"
-
         }, {
             time: 3.5,
-            text: "Nasungura alavukku idhukka naan podikanum "
+            text: "Nasungura alavukku idhukka naan podikanum"
         }, {
             time: 7,
             text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐵"
@@ -156,17 +186,18 @@
         startBtn.onclick = () => {
             intro.style.display = 'none';
             main.style.display = 'block';
-            startAnimation();
+            bgm.currentTime = 0;
+            startHeartAnimation();
         };
 
-        function startAnimation() {
+        function startHeartAnimation() {
             const c = document.getElementById('c');
             const ctx = c.getContext('2d', {
                 alpha: true
             });
             let W = c.width = window.innerWidth;
             let H = c.height = window.innerHeight;
-            const PARTICLES = 1000;
+            const PARTICLES = 1200;
 
             function heartPoint(t, s) {
                 const x = s * 16 * Math.pow(Math.sin(t), 3);
@@ -178,7 +209,7 @@
                 const pts = [];
                 for (let i = 0; i < n; i++) {
                     const t = Math.random() * Math.PI * 2;
-                    const r = 0.7 + Math.random() * 0.3;
+                    const r = 0.8 + Math.random() * 0.3;
                     const [x, y] = heartPoint(t, scale * r);
                     pts.push([ox + x, oy + y]);
                 }
@@ -192,7 +223,8 @@
                     this.tx = target[0];
                     this.ty = target[1];
                     this.speed = 0.02 + Math.random() * 0.04;
-                    this.size = 1 + Math.random() * 2;
+                    this.size = 1 + Math.random() * 1.8;
+                    this.color = `hsl(${Math.random() * 40 + 330},100%,70%)`;
                 }
                 update(pulse) {
                     const cx = W / 2,
@@ -204,61 +236,59 @@
                     this.x += (txp - this.x) * this.speed;
                     this.y += (typ - this.y) * this.speed;
                 }
-                draw(a) {
+                draw() {
                     ctx.beginPath();
-                    ctx.fillStyle = `rgba(255,120,190,${a / 255})`;
+                    ctx.fillStyle = this.color;
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
 
-            const heartPos = generateHeartPositions(PARTICLES, Math.min(W, H) / 45, W / 2, H / 2);
+            const heartPos = generateHeartPositions(PARTICLES, Math.min(W, H) / (W < 600 ? 30 : 45), W / 2, H / 2);
             const particles = heartPos.map(p => new Particle(p));
 
-            let fadeAlpha = 255,
-                tCounter = 0,
-                floatTimer = 0;
+            let tCounter = 0;
 
             function loop(now) {
-                const dt = now - (loop.last || now);
-                loop.last = now;
-                tCounter += dt * 0.001;
-                floatTimer += dt * 0.001;
-                ctx.fillStyle = "rgba(0,0,20,0.4)";
-                ctx.fillRect(0, 0, W, H);
-                const pulse = 1 + 0.05 * Math.sin(tCounter * 2.5);
-                for (let p of particles) {
-                    p.update(pulse);
-                    p.draw(fadeAlpha);
+                if (!bgm.paused) {
+                    tCounter += 0.02;
+                    ctx.fillStyle = "rgba(0,0,25,0.3)";
+                    ctx.fillRect(0, 0, W, H);
+                    const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
+                    for (let p of particles) {
+                        p.update(pulse);
+                        p.draw();
+                    }
+                    requestAnimationFrame(loop);
                 }
-                if (floatTimer > 3) {
-                    fadeAlpha = Math.max(0, fadeAlpha - 3);
-                }
-                if (floatTimer > 3 && fadeAlpha <= 0) {
-                    bgm.play().catch(() => alert("Click anywhere to allow audio"));
-                    fadeAlpha = 255;
-                    floatTimer = 0;
-                    tCounter = 0;
-                }
-                requestAnimationFrame(loop);
             }
             requestAnimationFrame(loop);
-        }
 
-        bgm.ontimeupdate = () => {
-            const t = bgm.currentTime;
-            let current = "";
-            for (let i = lyricsData.length - 1; i >= 0; i--) {
-                if (t >= lyricsData[i].time) {
-                    current = lyricsData[i].text;
-                    break;
+            bgm.play().catch(() => alert("Click anywhere to allow audio"));
+            bgm.loop = false;
+
+            bgm.onended = () => {
+                lyricBox.style.opacity = 0;
+                main.style.display = 'none';
+                intro.style.display = 'flex';
+                startBtn.textContent = "Start Again 💕";
+            };
+
+            bgm.ontimeupdate = () => {
+                const t = bgm.currentTime;
+                let current = "";
+                for (let i = lyricsData.length - 1; i >= 0; i--) {
+                    if (t >= lyricsData[i].time) {
+                        current = lyricsData[i].text;
+                        break;
+                    }
                 }
-            }
-            if (current !== lyricBox.textContent) {
-                lyricBox.textContent = current;
-                lyricBox.style.opacity = current ? 1 : 0;
-            }
-        };
+                if (current !== lyricBox.textContent) {
+                    lyricBox.textContent = current;
+                    lyricBox.style.opacity = current ? 1 : 0;
+                }
+            };
+        }
     </script>
 </body>
 
