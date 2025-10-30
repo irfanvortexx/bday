@@ -1,269 +1,263 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Happy Birthday Shahana 💕</title>
-    <style>
-         :root {
-            --bg1: #000;
-            --bg2: #0a0015;
-            --text: #ffe6f2;
-        }
-        
-        html,
-        body {
-            margin: 0;
-            height: 100%;
-            background: radial-gradient(circle at center, var(--bg1) 0%, var(--bg2) 100%);
-            font-family: "Segoe Script", cursive;
-            color: var(--text);
-            overflow: hidden;
-        }
-        
-        #intro {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: #000;
-            text-align: center;
-        }
-        
-        #title {
-            font-size: clamp(26px, 5vw, 42px);
-            text-shadow: 0 0 25px #ff85c2, 0 0 50px #ff3ea6;
-            margin-bottom: 30px;
-        }
-        
-        #startBtn {
-            padding: 12px 28px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            background: #ff7ab5;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 15px #ff7ab5;
-            transition: 0.3s;
-            width: clamp(120px, 40%, 200px);
-        }
-        
-        #startBtn:hover {
-            background: #ff3ea6;
-            box-shadow: 0 0 25px #ff3ea6;
-        }
-        
-        .wrap {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            flex-direction: column;
-        }
-        
-        canvas {
-            display: block;
-        }
-        
-        #lyrics {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            font-size: clamp(14px, 4vw, 26px);
-            line-height: 1.4em;
-            text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
-            color: #fff0f7;
-            opacity: 0;
-            transition: opacity 1s;
-            width: 75%;
-            max-width: 480px;
-            pointer-events: none;
-            filter: drop-shadow(0 0 8px #ff66b2);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday Shahana 💕</title>
+
+  <!-- Added Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Contribute&family=Vanessa+Valentine&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg1: #000;
+      --bg2: #0a0015;
+      --text: #ffe6f2;
+    }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background: radial-gradient(circle at center, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      text-align: center;
+      background: radial-gradient(circle at center, #000 0%, #0a0015 100%);
+    }
+
+    #title {
+      font-family: "Contribute", cursive;
+      font-size: clamp(26px, 5vw, 42px);
+      text-shadow: 0 0 25px #ff85c2, 0 0 50px #ff3ea6;
+      color: #ffe6f2;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    #startBtn {
+      font-family: "Vanessa Valentine", cursive;
+      padding: 12px 28px;
+      font-size: clamp(16px, 4vw, 20px);
+      border: none;
+      border-radius: 10px;
+      background: #ff7ab5;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff7ab5;
+      transition: 0.3s;
+      width: clamp(120px, 40%, 200px);
+      text-align: center;
+    }
+
+    #startBtn:hover {
+      background: #ff3ea6;
+      box-shadow: 0 0 25px #ff3ea6;
+    }
+
+    .wrap {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #lyrics {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-family: "Contribute", cursive;
+      font-size: clamp(14px, 4vw, 26px);
+      line-height: 1.4em;
+      text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
+      color: #fff0f7;
+      opacity: 0;
+      transition: opacity 1s;
+      width: 80%;
+      max-width: 480px;
+      pointer-events: none;
+      filter: drop-shadow(0 0 8px #ff66b2);
+    }
+
+    @media (max-width: 600px) {
+      #title {
+        font-size: 28px;
+      }
+      #startBtn {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div id="intro">
-        <h2 id="title">Happy Birthday Shahana 💕</h2>
-        <button id="startBtn">Start</button>
+  <div id="intro">
+    <h2 id="title">Happy Birthday Shahana 💕</h2>
+    <button id="startBtn">Start</button>
+  </div>
+
+  <div id="main" style="display:none;">
+    <div class="wrap">
+      <canvas id="c"></canvas>
+      <div id="lyrics"></div>
     </div>
+  </div>
 
-    <div id="main" style="display:none;">
-        <div class="wrap">
-            <canvas id="c"></canvas>
-            <div id="lyrics"></div>
-        </div>
-    </div>
+  <audio id="bgm" src="song.mp3" preload="auto"></audio>
 
-    <audio id="bgm" src="song.mp3" preload="auto"></audio>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const intro = document.getElementById('intro');
+    const main = document.getElementById('main');
+    const bgm = document.getElementById('bgm');
+    const lyricBox = document.getElementById('lyrics');
 
-    <script>
-        const startBtn = document.getElementById('startBtn');
-        const intro = document.getElementById('intro');
-        const main = document.getElementById('main');
-        const bgm = document.getElementById('bgm');
-        const lyricBox = document.getElementById('lyrics');
+    const lyricsData = [
+      { time: 0, text: "En viral irukudhu un viral kidakanum 🫴🏻" },
+      { time: 3.5, text: "Nasungura alavukku idhukka naan podikanum 🫂" },
+      { time: 7, text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐒" },
+      { time: 10.5, text: "Uchu ulla varaikkume unakka enna podikanum 💕" },
+      { time: 14, text: "Kadal alai pola un kaal thotti udachi 🌊" },
+      { time: 17.5, text: "Kadalulla paarvai naan illa di ❤️‍🩹" },
+      { time: 21, text: "Kadal mannu pola un kaaloda ootti 🌺" },
+      { time: 24.5, text: "Karai thaa kannaala kanne nee kalangadhe di 💕" },
+      { time: 28, text: "Kannaala kanne nee kalangadhe di 🥹" },
+      { time: 31.5, text: "En uyiroda aadharamaa nee thaane di 🫵🏻" },
+      { time: 35, text: "Kannaala kanne nee kalangadhe di 🥹" },
+      { time: 38, text: "Yaar pona enna naan iruppen di 👫🏻" }
+    ];
 
-        const lyricsData = [{
-            time: 0,
-            text: "En viral irukudhu un viral kidakanum 🫴🏻"
-        }, {
-            time: 3.5,
-            text: "Nasungura alavukku idhukka naan podikanum 🫂"
-        }, {
-            time: 7,
-            text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐒"
-        }, {
-            time: 10.5,
-            text: "Uchu ulla varaikkume unakka enna podikanum 💕"
-        }, {
-            time: 14,
-            text: "Kadal alai pola un kaal thotti udachi 🌊"
-        }, {
-            time: 17.5,
-            text: "Kadalulla paarvai naan illa di ❤️‍🩹"
-        }, {
-            time: 21,
-            text: "Kadal mannu pola un kaaloda ootti 🌺"
-        }, {
-            time: 24.5,
-            text: "Karai thaa kannaala kanne nee kalangadhe di 💕"
-        }, {
-            time: 28,
-            text: "Kannaala kanne nee kalangadhe di 🥹"
-        }, {
-            time: 31.5,
-            text: "En uyiroda aadharamaa nee thaane di 🫵🏻"
-        }, {
-            time: 35,
-            text: "Kannaala kanne nee kalangadhe di 🥹"
-        }, {
-            time: 38,
-            text: "Yaar pona enna naan iruppen di 👫🏻"
-        }];
+    startBtn.onclick = () => {
+      intro.style.display = 'none';
+      main.style.display = 'flex';
+      bgm.currentTime = 0;
+      startHeartAnimation();
+    };
 
-        startBtn.onclick = () => {
-            intro.style.display = 'none';
-            main.style.display = 'block';
-            bgm.currentTime = 0;
-            startHeartAnimation();
-        };
+    function startHeartAnimation() {
+      const c = document.getElementById('c');
+      const ctx = c.getContext('2d', { alpha: true });
+      let W = c.width = window.innerWidth;
+      let H = c.height = window.innerHeight;
+      const PARTICLES = 1200;
 
-        function startHeartAnimation() {
-            const c = document.getElementById('c');
-            const ctx = c.getContext('2d', {
-                alpha: true
-            });
-            let W = c.width = window.innerWidth;
-            let H = c.height = window.innerHeight;
-            const PARTICLES = 1200;
+      window.addEventListener('resize', () => {
+        W = c.width = window.innerWidth;
+        H = c.height = window.innerHeight;
+      });
 
-            window.addEventListener('resize', () => {
-                W = c.width = window.innerWidth;
-                H = c.height = window.innerHeight;
-            });
+      function heartPoint(t, s) {
+        const x = s * 16 * Math.pow(Math.sin(t), 3);
+        const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        return [x, y];
+      }
 
-            function heartPoint(t, s) {
-                const x = s * 16 * Math.pow(Math.sin(t), 3);
-                const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-                return [x, y];
-            }
-
-            function generateHeartPositions(n, scale, ox, oy) {
-                const pts = [];
-                for (let i = 0; i < n; i++) {
-                    const t = Math.random() * Math.PI * 2;
-                    const r = 0.8 + Math.random() * 0.3;
-                    const [x, y] = heartPoint(t, scale * r);
-                    pts.push([ox + x, oy + y]);
-                }
-                return pts;
-            }
-
-            class Particle {
-                constructor(target) {
-                    this.x = Math.random() * W;
-                    this.y = Math.random() * H;
-                    this.tx = target[0];
-                    this.ty = target[1];
-                    this.speed = 0.02 + Math.random() * 0.04;
-                    this.size = 1 + Math.random() * 1.8;
-                    this.color = `hsl(${Math.random() * 40 + 330},100%,70%)`;
-                }
-                update(pulse) {
-                    const cx = W / 2,
-                        cy = H / 2;
-                    const dx = this.tx - cx,
-                        dy = this.ty - cy;
-                    const txp = cx + dx * pulse,
-                        typ = cy + dy * pulse;
-                    this.x += (txp - this.x) * this.speed;
-                    this.y += (typ - this.y) * this.speed;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.fillStyle = this.color;
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            const heartScale = Math.min(W, H) / (W < 600 ? 30 : 45);
-            const heartPos = generateHeartPositions(PARTICLES, heartScale, W / 2, H / 2);
-            const particles = heartPos.map(p => new Particle(p));
-
-            let tCounter = 0;
-
-            function loop() {
-                if (!bgm.paused) {
-                    tCounter += 0.02;
-                    ctx.fillStyle = "rgba(0,0,25,0.3)";
-                    ctx.fillRect(0, 0, W, H);
-                    const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
-                    for (let p of particles) {
-                        p.update(pulse);
-                        p.draw();
-                    }
-                    requestAnimationFrame(loop);
-                }
-            }
-            requestAnimationFrame(loop);
-
-            bgm.play().catch(() => alert("Tap anywhere to allow audio"));
-            bgm.loop = false;
-
-            bgm.onended = () => {
-                lyricBox.style.opacity = 0;
-                main.style.display = 'none';
-                intro.style.display = 'flex';
-                startBtn.textContent = "Start Again 💕";
-            };
-
-            bgm.ontimeupdate = () => {
-                const t = bgm.currentTime;
-                let current = "";
-                for (let i = lyricsData.length - 1; i >= 0; i--) {
-                    if (t >= lyricsData[i].time) {
-                        current = lyricsData[i].text;
-                        break;
-                    }
-                }
-                if (current !== lyricBox.textContent) {
-                    lyricBox.textContent = current;
-                    lyricBox.style.opacity = current ? 1 : 0;
-                }
-            };
+      function generateHeartPositions(n, scale, ox, oy) {
+        const pts = [];
+        for (let i = 0; i < n; i++) {
+          const t = Math.random() * Math.PI * 2;
+          const r = 0.8 + Math.random() * 0.3;
+          const [x, y] = heartPoint(t, scale * r);
+          pts.push([ox + x, oy + y]);
         }
-    </script>
+        return pts;
+      }
+
+      class Particle {
+        constructor(target) {
+          this.x = Math.random() * W;
+          this.y = Math.random() * H;
+          this.tx = target[0];
+          this.ty = target[1];
+          this.speed = 0.02 + Math.random() * 0.04;
+          this.size = 1 + Math.random() * 1.8;
+          this.color = `hsl(${Math.random() * 40 + 330},100%,70%)`;
+        }
+        update(pulse) {
+          const cx = W / 2, cy = H / 2;
+          const dx = this.tx - cx, dy = this.ty - cy;
+          const txp = cx + dx * pulse, typ = cy + dy * pulse;
+          this.x += (txp - this.x) * this.speed;
+          this.y += (typ - this.y) * this.speed;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      const heartScale = Math.min(W, H) / (W < 600 ? 30 : 45);
+      const heartPos = generateHeartPositions(PARTICLES, heartScale, W / 2, H / 2);
+      const particles = heartPos.map(p => new Particle(p));
+
+      let tCounter = 0;
+      function loop() {
+        if (!bgm.paused) {
+          tCounter += 0.02;
+          ctx.fillStyle = "rgba(0,0,25,0.3)";
+          ctx.fillRect(0, 0, W, H);
+          const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
+          for (let p of particles) {
+            p.update(pulse);
+            p.draw();
+          }
+          requestAnimationFrame(loop);
+        }
+      }
+      requestAnimationFrame(loop);
+
+      bgm.play().catch(() => alert("Tap anywhere to allow audio"));
+      bgm.loop = false;
+
+      bgm.onended = () => {
+        lyricBox.style.opacity = 0;
+        main.style.display = 'none';
+        intro.style.display = 'flex';
+        startBtn.textContent = "Start Again 💕";
+      };
+
+      bgm.ontimeupdate = () => {
+        const t = bgm.currentTime;
+        let current = "";
+        for (let i = lyricsData.length - 1; i >= 0; i--) {
+          if (t >= lyricsData[i].time) {
+            current = lyricsData[i].text;
+            break;
+          }
+        }
+        if (current !== lyricBox.textContent) {
+          lyricBox.textContent = current;
+          lyricBox.style.opacity = current ? 1 : 0;
+        }
+      };
+    }
+  </script>
 </body>
-
-</html>
-
+</html> 
