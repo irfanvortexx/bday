@@ -29,10 +29,16 @@
             justify-content: center;
             height: 100vh;
             background: #000;
+            text-align: center;
+        }
+        
+        #title {
+            font-size: clamp(26px, 5vw, 42px);
+            text-shadow: 0 0 25px #ff85c2, 0 0 50px #ff3ea6;
+            margin-bottom: 30px;
         }
         
         #startBtn {
-            margin-top: 20px;
             padding: 12px 28px;
             font-size: 18px;
             border: none;
@@ -42,6 +48,7 @@
             cursor: pointer;
             box-shadow: 0 0 15px #ff7ab5;
             transition: 0.3s;
+            width: clamp(120px, 40%, 200px);
         }
         
         #startBtn:hover {
@@ -61,77 +68,37 @@
         
         canvas {
             display: block;
-            width: 100vw;
-            height: 100vh;
         }
         
         #lyrics {
             position: absolute;
-            top: 53%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            font-size: clamp(12px, 3vw, 22px);
-            font-weight: 600;
+            font-size: clamp(14px, 4vw, 26px);
             line-height: 1.4em;
-            color: #fff;
-            width: 60%;
+            text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
+            color: #fff0f7;
             opacity: 0;
-            transition: opacity 0.6s ease;
-            text-shadow: 0 0 10px #ff80bf, 0 0 20px #ff4fa3;
-            filter: drop-shadow(0 0 4px #ff66b2);
+            transition: opacity 1s;
+            width: 75%;
+            max-width: 480px;
             pointer-events: none;
-        }
-        
-        @media (max-width: 600px) {
-            #lyrics {
-                font-size: 3.5vw;
-                width: 80%;
-            }
-        }
-        
-        #title {
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-size: clamp(24px, 5vw, 40px);
-            text-shadow: 0 0 25px #ff85c2, 0 0 50px #ff3ea6;
-            animation: glow 3s infinite alternate ease-in-out;
-        }
-        
-        @keyframes glow {
-            0% {
-                text-shadow: 0 0 20px #ff66b2, 0 0 40px #ff3399;
-            }
-            100% {
-                text-shadow: 0 0 40px #ff99cc, 0 0 80px #ff4fa3;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            #lyrics {
-                font-size: 5vw;
-                width: 90%;
-            }
-            #title {
-                font-size: 6vw;
-                top: 25px;
-            }
+            filter: drop-shadow(0 0 8px #ff66b2);
         }
     </style>
 </head>
 
 <body>
     <div id="intro">
-        <button id="startBtn">Start 💖</button>
+        <h2 id="title">Happy Birthday Shahana 💕</h2>
+        <button id="startBtn">Start</button>
     </div>
 
     <div id="main" style="display:none;">
         <div class="wrap">
             <canvas id="c"></canvas>
-            <h2 id="title">Happy Birthday Shahana 💕</h2>
             <div id="lyrics"></div>
         </div>
     </div>
@@ -199,6 +166,11 @@
             let H = c.height = window.innerHeight;
             const PARTICLES = 1200;
 
+            window.addEventListener('resize', () => {
+                W = c.width = window.innerWidth;
+                H = c.height = window.innerHeight;
+            });
+
             function heartPoint(t, s) {
                 const x = s * 16 * Math.pow(Math.sin(t), 3);
                 const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
@@ -244,12 +216,13 @@
                 }
             }
 
-            const heartPos = generateHeartPositions(PARTICLES, Math.min(W, H) / (W < 600 ? 30 : 45), W / 2, H / 2);
+            const heartScale = Math.min(W, H) / (W < 600 ? 30 : 45);
+            const heartPos = generateHeartPositions(PARTICLES, heartScale, W / 2, H / 2);
             const particles = heartPos.map(p => new Particle(p));
 
             let tCounter = 0;
 
-            function loop(now) {
+            function loop() {
                 if (!bgm.paused) {
                     tCounter += 0.02;
                     ctx.fillStyle = "rgba(0,0,25,0.3)";
@@ -264,7 +237,7 @@
             }
             requestAnimationFrame(loop);
 
-            bgm.play().catch(() => alert("Click anywhere to allow audio"));
+            bgm.play().catch(() => alert("Tap anywhere to allow audio"));
             bgm.loop = false;
 
             bgm.onended = () => {
