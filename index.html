@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>💕</title>
+    <title>💖</title>
     <style>
         html,
         body {
@@ -76,7 +76,7 @@
             transform: scale(1.05)
         }
         
-        #playBtn {
+        #startBtn {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -94,7 +94,7 @@
             animation: pulse 2s infinite
         }
         
-        #playBtn:hover {
+        #startBtn:hover {
             background: linear-gradient(135deg, #ff3ea6, #ff1a75);
             box-shadow: 0 0 40px #ff3ea6;
             transform: translate(-50%, -50%) scale(1.05)
@@ -113,24 +113,21 @@
 </head>
 
 <body>
-    <div class="wrap">
+    <button id="startBtn">Start</button>
+    <div class="wrap" style="display:none;">
         <canvas id="c"></canvas>
         <div id="lyrics"></div>
         <div id="endButtons">
-            <button class="endBtn" id="againBtn">Start Again 🔁</button>
+            <button class="endBtn" id="restartBtn">Restart</button>
+            <button class="endBtn" id="nextBtn">Next</button>
         </div>
-        <button id="playBtn">Play 🎵</button>
     </div>
-
     <audio id="bgm" src="song.mp3" preload="auto"></audio>
-
     <script>
         const startBtn = document.getElementById('startBtn');
-        const intro = document.getElementById('intro');
-        const main = document.getElementById('main');
+        const wrap = document.querySelector('.wrap');
         const bgm = document.getElementById('bgm');
         const lyricBox = document.getElementById('lyrics');
-        const canvas = document.getElementById('c');
         const endButtons = document.getElementById('endButtons');
         const restartBtn = document.getElementById('restartBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -173,99 +170,100 @@
             text: "Yaar pona enna naan iruppen di 👫🏻"
         }];
 
-        startBtn.onclick = () => {
-            intro.style.display = 'none';
-            main.style.display = 'block';
-            bgm.currentTime = 0;
-            bgm.play().catch(() => alert("Click anywhere to allow audio"));
-            startAnimation();
-        };
+        let W, H, ctx, particles = [],
+            fadeAlpha = 255,
+            tCounter = 0,
+            animID;
+
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none';
+            wrap.style.display = 'flex';
+            bgm.play().catch(() => alert('Tap again to allow audio'));
+            initCanvas();
+            animate();
+        });
 
         restartBtn.onclick = () => {
             endButtons.style.display = 'none';
-            canvas.style.opacity = 1;
-            lyricBox.textContent = '';
-            lyricBox.style.opacity = 0;
+            fadeAlpha = 255;
             bgm.currentTime = 0;
             bgm.play();
+            animate();
         };
+        nextBtn.onclick = () => alert('Next action here.');
 
-        nextBtn.onclick = () => {
-            alert("Next section loading... (implement navigation here)");
-        };
-
-        function startAnimation() {
-            const ctx = canvas.getContext('2d');
-            let W = canvas.width = window.innerWidth;
-            let H = canvas.height = window.innerHeight;
+        function initCanvas() {
+            const c = document.getElementById('c');
+            ctx = c.getContext('2d');
+            resizeCanvas();
+            window.onresize = resizeCanvas;
             const PARTICLES = 900;
-
-            function heartPoint(t, s) {
-                const x = s * 16 * Math.pow(Math.sin(t), 3);
-                const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-                return [x, y];
-            }
-
-            function generateHeartPositions(n, scale, ox, oy) {
-                const pts = [];
-                for (let i = 0; i < n; i++) {
-                    const t = Math.random() * Math.PI * 2;
-                    const r = 0.7 + Math.random() * 0.3;
-                    const [x, y] = heartPoint(t, scale * r);
-                    pts.push([ox + x, oy + y]);
-                }
-                return pts;
-            }
-
-            class Particle {
-                constructor(target) {
-                    this.x = Math.random() * W;
-                    this.y = Math.random() * H;
-                    this.tx = target[0];
-                    this.ty = target[1];
-                    this.speed = 0.02 + Math.random() * 0.04;
-                    this.size = 1 + Math.random() * 2;
-                }
-                update(pulse) {
-                    const cx = W / 2,
-                        cy = H / 2;
-                    const dx = this.tx - cx,
-                        dy = this.ty - cy;
-                    const txp = cx + dx * pulse,
-                        typ = cy + dy * pulse;
-                    this.x += (txp - this.x) * this.speed;
-                    this.y += (typ - this.y) * this.speed;
-                }
-                draw(a) {
-                    ctx.beginPath();
-                    ctx.fillStyle = `rgba(255,120,190,${a / 255})`;
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
             const heartPos = generateHeartPositions(PARTICLES, Math.min(W, H) / 45, W / 2, H / 2);
-            const particles = heartPos.map(p => new Particle(p));
-
-            let fadeAlpha = 255,
-                tCounter = 0;
-
-            function loop(now) {
-                const dt = now - (loop.last || now);
-                loop.last = now;
-                tCounter += dt * 0.001;
-                ctx.fillStyle = "rgba(255,240,245,0.5)";
-                ctx.fillRect(0, 0, W, H);
-                const pulse = 1 + 0.05 * Math.sin(tCounter * 2.5);
-                for (let p of particles) {
-                    p.update(pulse);
-                    p.draw(fadeAlpha);
-                }
-                requestAnimationFrame(loop);
-            }
-            requestAnimationFrame(loop);
+            particles = heartPos.map(p => new Particle(p));
         }
 
+        function resizeCanvas() {
+            const c = document.getElementById('c');
+            W = c.width = window.innerWidth;
+            H = c.height = window.innerHeight;
+        }
+
+        function heartPoint(t, s) {
+            const x = s * 16 * Math.pow(Math.sin(t), 3);
+            const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            return [x, y];
+        }
+
+        function generateHeartPositions(n, scale, ox, oy) {
+            const pts = [];
+            for (let i = 0; i < n; i++) {
+                const t = Math.random() * Math.PI * 2;
+                const r = 0.7 + Math.random() * 0.3;
+                const [x, y] = heartPoint(t, scale * r);
+                pts.push([ox + x, oy + y]);
+            }
+            return pts;
+        }
+        class Particle {
+            constructor(target) {
+                this.x = Math.random() * W;
+                this.y = Math.random() * H;
+                this.tx = target[0];
+                this.ty = target[1];
+                this.speed = 0.02 + Math.random() * 0.04;
+                this.size = 1 + Math.random() * 2;
+            }
+            update(pulse) {
+                const cx = W / 2,
+                    cy = H / 2;
+                const dx = this.tx - cx,
+                    dy = this.ty - cy;
+                const txp = cx + dx * pulse,
+                    typ = cy + dy * pulse;
+                this.x += (txp - this.x) * this.speed;
+                this.y += (typ - this.y) * this.speed;
+            }
+            draw(a) {
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(255,120,190,${a/255})`;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate(now) {
+            const dt = now - (animate.last || now);
+            animate.last = now;
+            tCounter += dt * 0.001;
+            ctx.fillStyle = "rgba(255,240,245,0.5)";
+            ctx.fillRect(0, 0, W, H);
+            const pulse = 1 + 0.05 * Math.sin(tCounter * 2.5);
+            for (let p of particles) {
+                p.update(pulse);
+                p.draw(fadeAlpha);
+            }
+            animID = requestAnimationFrame(animate);
+        }
         bgm.ontimeupdate = () => {
             const t = bgm.currentTime;
             let current = "";
@@ -280,13 +278,13 @@
                 lyricBox.style.opacity = current ? 1 : 0;
             }
         };
-
         bgm.onended = () => {
-            canvas.style.opacity = 0;
-            lyricBox.style.opacity = 0;
+            cancelAnimationFrame(animID);
+            const c = document.getElementById('c');
+            c.style.opacity = 0;
             setTimeout(() => {
                 endButtons.style.display = 'flex';
-            }, 1200);
+            }, 1000);
         };
     </script>
 </body>
