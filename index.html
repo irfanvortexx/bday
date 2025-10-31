@@ -14,7 +14,7 @@
             font-family: "Segoe Script", cursive;
             color: #330033;
             overflow: hidden;
-            text-align: center;
+            text-align: center
         }
         
         .wrap {
@@ -24,12 +24,12 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            position: relative;
+            position: relative
         }
         
         #c {
             display: block;
-            transition: opacity 1s;
+            transition: opacity 1s
         }
         
         #lyrics {
@@ -41,10 +41,10 @@
             text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
             color: #ff1a75;
             opacity: 0;
-            transition: opacity 0.8s;
+            transition: opacity .8s;
             width: 75%;
             max-width: 480px;
-            pointer-events: none;
+            pointer-events: none
         }
         
         #endButtons {
@@ -54,7 +54,7 @@
             transform: translate(-50%, -50%);
             display: none;
             flex-direction: row;
-            gap: 20px;
+            gap: 20px
         }
         
         .endBtn {
@@ -67,13 +67,13 @@
             cursor: pointer;
             box-shadow: 0 0 20px #ff7ab5;
             transition: .3s;
-            font-family: "Segoe Script", cursive;
+            font-family: "Segoe Script", cursive
         }
         
         .endBtn:hover {
             background: linear-gradient(135deg, #ff3ea6, #ff1a75);
             box-shadow: 0 0 30px #ff3ea6;
-            transform: scale(1.05);
+            transform: scale(1.05)
         }
         
         #playBtn {
@@ -91,22 +91,22 @@
             box-shadow: 0 0 30px #ff7ab5;
             transition: .3s;
             font-family: "Segoe Script", cursive;
-            animation: pulse 2s infinite;
+            animation: pulse 2s infinite
         }
         
         #playBtn:hover {
             background: linear-gradient(135deg, #ff3ea6, #ff1a75);
             box-shadow: 0 0 40px #ff3ea6;
-            transform: translate(-50%, -50%) scale(1.05);
+            transform: translate(-50%, -50%) scale(1.05)
         }
         
         @keyframes pulse {
             0%,
             100% {
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -50%) scale(1)
             }
             50% {
-                transform: translate(-50%, -50%) scale(1.05);
+                transform: translate(-50%, -50%) scale(1.05)
             }
         }
     </style>
@@ -126,11 +126,10 @@
 
     <script>
         const bgm = document.getElementById("bgm");
-        const c = document.getElementById("c");
-        const ctx = c.getContext("2d");
+        const c = document.getElementById("c"),
+            ctx = c.getContext("2d");
         const lyricBox = document.getElementById("lyrics");
         const againBtn = document.getElementById("againBtn");
-        const nextBtn = document.getElementById("nextBtn");
         const endButtons = document.getElementById("endButtons");
         const playBtn = document.getElementById("playBtn");
 
@@ -189,7 +188,7 @@
                 this.ty = ty;
                 this.speed = 0.02 + Math.random() * 0.04;
                 this.size = 1 + Math.random() * 1.8;
-                this.color = `hsl(${Math.random() * 40 + 330},100%,60%)`;
+                this.color = `hsl(${Math.random()*40+330},100%,60%)`;
             }
             update(pulse) {
                 const cx = W / 2,
@@ -253,7 +252,6 @@
         }
 
         function startLyrics() {
-            let currentIndex = -1;
             clearInterval(lyricInterval);
             lyricInterval = setInterval(() => {
                 const t = bgm.currentTime;
@@ -282,10 +280,12 @@
             c.style.opacity = 1;
             bgm.currentTime = 0;
             startHeartAnimation();
-            bgm.play();
-            startLyrics();
+            bgm.play().then(() => {
+                startLyrics();
+            }).catch(() => {
+                console.log("Play blocked until user gesture");
+            });
         }
-
         bgm.onended = () => {
             clearInterval(lyricInterval);
             lyricBox.style.opacity = 0;
@@ -294,16 +294,17 @@
                 endButtons.style.display = "flex";
             }, 1000);
         };
-
-        againBtn.onclick = () => {
-            startPlayback();
-        };
-
-        nextBtn.onclick = () => {
-            window.location.href = "level2.html";
-        };
-
-        playBtn.addEventListener("click", startPlayback);
+        againBtn.onclick = startPlayback;
+        playBtn.addEventListener("click", startPlayback, {
+            passive: true
+        });
+        document.addEventListener("touchstart", () => {
+            window.focus();
+            if (bgm.paused) startPlayback();
+        }, {
+            once: true,
+            passive: true
+        });
     </script>
 </body>
 
