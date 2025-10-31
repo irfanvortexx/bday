@@ -227,19 +227,17 @@
             const particles = heartPos.map(p => new Particle(p[0], p[1]));
             let tCounter = 0;
 
-            function loop() {
-                if (!bgm.paused) {
-                    tCounter += 0.02;
-                    ctx.fillStyle = "rgba(255,255,255,0.3)";
-                    ctx.fillRect(0, 0, W, H);
-                    const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
-                    for (let p of particles) {
-                        p.update(pulse);
-                        p.draw();
-                    }
-                    animationId = requestAnimationFrame(loop);
-                }
+        function loop() {
+            tCounter += 0.02;
+            ctx.fillStyle = "rgba(255,255,255,0.3)";
+            ctx.fillRect(0, 0, W, H);
+            const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
+            for (let p of particles) {
+                p.update(pulse);
+                p.draw();
             }
+            animationId = requestAnimationFrame(loop);
+        }
             animationId = requestAnimationFrame(loop);
         }
 
@@ -252,9 +250,14 @@
             tapStart.style.display = "none";
             c.style.opacity = 1;
             bgm.currentTime = 0;
-            bgm.play().then(() => {
-                startHeartAnimation();
-            }).catch(() => {});
+            
+            // Start animation first
+            startHeartAnimation();
+            
+            // Then play audio
+            bgm.play().catch(err => {
+                console.log("Playback failed:", err);
+            });
         }
 
         bgm.onended = () => {
@@ -264,8 +267,6 @@
                 endButtons.style.display = "flex";
             }, 1000);
         };
-        
-        bgm.ontimeupdate = () => {
             const t = bgm.currentTime;
             let current = "";
             for (let i = lyricsData.length - 1; i >= 0; i--) {
