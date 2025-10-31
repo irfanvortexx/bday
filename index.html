@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>💕</title>
+    <title>Happy Birthday Shahana 💕</title>
     <style>
         html,
         body {
@@ -16,7 +16,7 @@
             overflow: hidden;
             text-align: center;
         }
-
+        
         .wrap {
             width: 100%;
             height: 100%;
@@ -26,12 +26,12 @@
             flex-direction: column;
             position: relative;
         }
-
+        
         #c {
             display: block;
             transition: opacity 1s;
         }
-
+        
         #lyrics {
             position: absolute;
             top: 50%;
@@ -47,7 +47,7 @@
             pointer-events: none;
             filter: drop-shadow(0 0 8px #ff66b2);
         }
-
+        
         #endButtons {
             position: absolute;
             top: 50%;
@@ -57,7 +57,7 @@
             flex-direction: row;
             gap: 15px;
         }
-
+        
         button {
             padding: 12px 26px;
             font-size: 18px;
@@ -69,52 +69,34 @@
             box-shadow: 0 0 15px #ff7ab5;
             transition: .3s;
         }
-
+        
         button:hover {
             background: #ff3ea6;
             box-shadow: 0 0 25px #ff3ea6;
         }
-
-        #tapOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 240, 245, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            cursor: pointer;
-            transition: opacity 1s ease;
-        }
-
-        #tapOverlay.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        #tapText {
-            font-size: clamp(20px, 6vw, 32px);
+        
+        #tapStart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(18px, 5vw, 28px);
             color: #ff1a75;
-            text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff66b2;
-            animation: pulse 1.4s infinite;
-            user-select: none;
+            text-shadow: 0 0 20px #ff99cc;
+            animation: pulse 2s infinite;
         }
-
+        
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        
+        @media (max-width: 600px) {
+            #title {
+                font-size: 28px;
             }
-            50% {
-                transform: scale(1.08);
-                opacity: 0.7;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
+            #startBtn {
+                font-size: 16px;
             }
         }
     </style>
@@ -126,11 +108,9 @@
         <div id="lyrics"></div>
         <div id="endButtons">
             <button id="againBtn">Start Again 🔁</button>
+            <button id="nextBtn">Next 💖</button>
         </div>
-        <!-- Full-screen tap overlay -->
-        <div id="tapOverlay">
-            <div id="tapText">Tap anywhere to start music 🎵</div>
-        </div>
+        <div id="tapStart">Tap anywhere to start music 🎵</div>
     </div>
 
     <audio id="bgm" src="song.mp3" preload="auto"></audio>
@@ -138,27 +118,53 @@
     <script>
         const bgm = document.getElementById("bgm");
         const c = document.getElementById("c");
-        const ctx = c.getContext("2d", { alpha: true });
+        const ctx = c.getContext("2d", {
+            alpha: true
+        });
         const lyricBox = document.getElementById("lyrics");
         const againBtn = document.getElementById("againBtn");
         const nextBtn = document.getElementById("nextBtn");
         const endButtons = document.getElementById("endButtons");
-        const tapOverlay = document.getElementById("tapOverlay");
+        const tapStart = document.getElementById("tapStart");
 
-        const lyricsData = [
-            { time: 0, text: "En viral irukudhu un viral kidakanum 🫴🏻" },
-            { time: 3.5, text: "Nasungura alavukku idhukka naan podikanum 🫂" },
-            { time: 7, text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐒" },
-            { time: 10.5, text: "Uchu ulla varaikkume unakka enna podikanum 💕" },
-            { time: 14, text: "Kadal alai pola un kaal thotti udachi 🌊" },
-            { time: 17.5, text: "Kadalulla paarvai naan illa di ❤️‍🩹" },
-            { time: 21, text: "Kadal mannu pola un kaaloda ootti 🌺" },
-            { time: 24.5, text: "Karai thaa kannaala kanne nee kalangadhe di 💕" },
-            { time: 28, text: "Kannaala kanne nee kalangadhe di 🥹" },
-            { time: 31.5, text: "En uyiroda aadharamaa nee thaane di 🫵🏻" },
-            { time: 35, text: "Kannaala kanne nee kalangadhe di 🥹" },
-            { time: 38, text: "Yaar pona enna naan iruppen di 👫🏻" }
-        ];
+        const lyricsData = [{
+            time: 0,
+            text: "En viral irukudhu un viral kidakanum 🫴🏻"
+        }, {
+            time: 3.5,
+            text: "Nasungura alavukku idhukka naan podikanum 🫂"
+        }, {
+            time: 7,
+            text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐒"
+        }, {
+            time: 10.5,
+            text: "Uchu ulla varaikkume unakka enna podikanum 💕"
+        }, {
+            time: 14,
+            text: "Kadal alai pola un kaal thotti udachi 🌊"
+        }, {
+            time: 17.5,
+            text: "Kadalulla paarvai naan illa di ❤️‍🩹"
+        }, {
+            time: 21,
+            text: "Kadal mannu pola un kaaloda ootti 🌺"
+        }, {
+            time: 24.5,
+            text: "Karai thaa kannaala kanne nee kalangadhe di 💕"
+        }, {
+            time: 28,
+            text: "Kannaala kanne nee kalangadhe di 🥹"
+        }, {
+            time: 31.5,
+            text: "En uyiroda aadharamaa nee thaane di 🫵🏻"
+        }, {
+            time: 35,
+            text: "Kannaala kanne nee kalangadhe di 🥹"
+        }, {
+            time: 38,
+            text: "Yaar pona enna naan iruppen di 👫🏻"
+        }];
+
 
         let W, H, animationId;
 
@@ -177,12 +183,15 @@
                 this.ty = ty;
                 this.speed = 0.02 + Math.random() * 0.04;
                 this.size = 1 + Math.random() * 1.8;
-                this.color = `hsl(${Math.random() * 40 + 330},100%,60%)`;
+                this.color = `hsl(${Math.random()*40+330},100%,60%)`;
             }
             update(pulse) {
-                const cx = W / 2, cy = H / 2;
-                const dx = this.tx - cx, dy = this.ty - cy;
-                const txp = cx + dx * pulse, typ = cy + dy * pulse;
+                const cx = W / 2,
+                    cy = H / 2;
+                const dx = this.tx - cx,
+                    dy = this.ty - cy;
+                const txp = cx + dx * pulse,
+                    typ = cy + dy * pulse;
                 this.x += (txp - this.x) * this.speed;
                 this.y += (typ - this.y) * this.speed;
             }
@@ -240,15 +249,12 @@
         }
 
         function startPlayback() {
-            tapOverlay.classList.add("hide");
+            tapStart.style.display = "none";
             c.style.opacity = 1;
             bgm.currentTime = 0;
-
             bgm.play().then(() => {
                 startHeartAnimation();
-            }).catch((err) => {
-                console.log("Playback blocked:", err);
-            });
+            }).catch(() => {});
         }
 
         bgm.onended = () => {
@@ -258,7 +264,7 @@
                 endButtons.style.display = "flex";
             }, 1000);
         };
-
+        
         bgm.ontimeupdate = () => {
             const t = bgm.currentTime;
             let current = "";
@@ -273,20 +279,38 @@
                 lyricBox.style.opacity = current ? 1 : 0;
             }
         };
-
+        
         againBtn.onclick = () => {
             endButtons.style.display = "none";
             lyricBox.textContent = "";
             startPlayback();
         };
-
+        
         nextBtn.onclick = () => {
             window.location.href = "level2.html";
         };
 
-        // ✅ Guaranteed touch recognition on all devices
-        ["click", "touchstart", "touchend"].forEach(evt => {
-            tapOverlay.addEventListener(evt, startPlayback, { once: true });
+        // Handle both desktop and mobile interaction
+        function initInteraction() {
+            tapStart.style.display = "block";
+            
+            function handleInteraction(e) {
+                e.preventDefault();
+                startPlayback();
+                document.body.removeEventListener("click", handleInteraction);
+                document.body.removeEventListener("touchstart", handleInteraction);
+            }
+            
+            document.body.addEventListener("click", handleInteraction);
+            document.body.addEventListener("touchstart", handleInteraction);
+        }
+        
+        // Try autoplay first, fallback to tap-to-play
+        bgm.play().then(() => {
+            tapStart.style.display = "none";
+            startHeartAnimation();
+        }).catch(() => {
+            initInteraction();
         });
     </script>
 </body>
