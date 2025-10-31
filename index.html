@@ -1,311 +1,127 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>💕</title>
-    <style>
-        html,
-        body {
-            margin: 0;
-            height: 100%;
-            background: linear-gradient(135deg, #ffe3ec, #fff0f5);
-            font-family: "Segoe Script", cursive;
-            color: #330033;
-            overflow: hidden;
-            text-align: center
-        }
-        
-        .wrap {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            position: relative
-        }
-        
-        #c {
-            display: block;
-            transition: opacity 1s
-        }
-        
-        #lyrics {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(14px, 4vw, 26px);
-            text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
-            color: #ff1a75;
-            opacity: 0;
-            transition: opacity .8s;
-            width: 75%;
-            max-width: 480px;
-            pointer-events: none
-        }
-        
-        #endButtons {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            flex-direction: row;
-            gap: 20px
-        }
-        
-        .endBtn {
-            padding: 14px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #ff7ab5, #ff3ea6);
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ff7ab5;
-            transition: .3s;
-            font-family: "Segoe Script", cursive
-        }
-        
-        .endBtn:hover {
-            background: linear-gradient(135deg, #ff3ea6, #ff1a75);
-            box-shadow: 0 0 30px #ff3ea6;
-            transform: scale(1.05)
-        }
-        
-        #playBtn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: clamp(10px, 3vw, 20px) clamp(25px, 6vw, 50px);
-            font-size: clamp(16px, 4vw, 26px);
-            border: none;
-            border-radius: 50px;
-            background: linear-gradient(135deg, #ff7ab5, #ff3ea6);
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 30px #ff7ab5;
-            transition: .3s;
-            font-family: "Segoe Script", cursive;
-            animation: pulse 2s infinite
-        }
-        
-        #playBtn:hover {
-            background: linear-gradient(135deg, #ff3ea6, #ff1a75);
-            box-shadow: 0 0 40px #ff3ea6;
-            transform: translate(-50%, -50%) scale(1.05)
-        }
-        
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: translate(-50%, -50%) scale(1)
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.05)
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>💕</title>
+<style>
+html,body{margin:0;height:100%;background:linear-gradient(135deg,#ffe3ec,#fff0f5);
+font-family:"Segoe Script",cursive;color:#330033;overflow:hidden;text-align:center}
+.wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+flex-direction:column;position:relative}
+#c{display:block;transition:opacity 1s}
+#lyrics{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+font-size:clamp(14px,4vw,26px);text-shadow:0 0 20px #ff99cc,0 0 40px #ff4fa3,0 0 60px #d63b8c;
+color:#ff1a75;opacity:0;transition:opacity .8s;width:75%;max-width:480px;pointer-events:none}
+#endButtons{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+display:none;flex-direction:row;gap:20px}
+.endBtn{padding:14px 30px;font-size:18px;border:none;border-radius:10px;
+background:linear-gradient(135deg,#ff7ab5,#ff3ea6);color:#fff;cursor:pointer;
+box-shadow:0 0 20px #ff7ab5;transition:.3s;font-family:"Segoe Script",cursive}
+.endBtn:hover{background:linear-gradient(135deg,#ff3ea6,#ff1a75);box-shadow:0 0 30px #ff3ea6;transform:scale(1.05)}
+#playBtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+padding:clamp(10px,3vw,20px) clamp(25px,6vw,50px);font-size:clamp(16px,4vw,26px);
+border:none;border-radius:50px;background:linear-gradient(135deg,#ff7ab5,#ff3ea6);color:#fff;
+cursor:pointer;box-shadow:0 0 30px #ff7ab5;transition:.3s;font-family:"Segoe Script",cursive;
+animation:pulse 2s infinite}
+#playBtn:hover{background:linear-gradient(135deg,#ff3ea6,#ff1a75);box-shadow:0 0 40px #ff3ea6;
+transform:translate(-50%,-50%) scale(1.05)}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}
+50%{transform:translate(-50%,-50%) scale(1.05)}}
+</style>
 </head>
 
 <body>
-    <div class="wrap">
-        <canvas id="c"></canvas>
-        <div id="lyrics"></div>
-        <div id="endButtons">
-            <button class="endBtn" id="againBtn">Start Again 🔁</button>
-        </div>
-        <button id="playBtn">Play 🎵</button>
-    </div>
+<div class="wrap">
+<canvas id="c"></canvas>
+<div id="lyrics"></div>
+<div id="endButtons">
+<button class="endBtn" id="againBtn">Start Again 🔁</button>
+</div>
+<button id="playBtn">Play 🎵</button>
+</div>
 
-    <audio id="bgm" src="song.mp3" preload="auto"></audio>
+<audio id="bgm" src="song.mp3" preload="auto"></audio>
 
-    <script>
-        const bgm = document.getElementById("bgm");
-        const c = document.getElementById("c"),
-            ctx = c.getContext("2d");
-        const lyricBox = document.getElementById("lyrics");
-        const againBtn = document.getElementById("againBtn");
-        const endButtons = document.getElementById("endButtons");
-        const playBtn = document.getElementById("playBtn");
+<script>
+const bgm=document.getElementById("bgm");
+const c=document.getElementById("c"),ctx=c.getContext("2d");
+const lyricBox=document.getElementById("lyrics");
+const againBtn=document.getElementById("againBtn");
+const endButtons=document.getElementById("endButtons");
+const playBtn=document.getElementById("playBtn");
 
-        const lyricsData = [{
-            time: 0,
-            text: "En viral irukudhu un viral kidakanum 🫴🏻"
-        }, {
-            time: 3.5,
-            text: "Nasungura alavukku idhukka naan podikanum 🫂"
-        }, {
-            time: 7,
-            text: "Thaan kannai thirakkaiyil un mugam theriyanum 🐒"
-        }, {
-            time: 10.5,
-            text: "Uchu ulla varaikkume unakka enna podikanum 💕"
-        }, {
-            time: 14,
-            text: "Kadal alai pola un kaal thotti udachi 🌊"
-        }, {
-            time: 17.5,
-            text: "Kadalulla paarvai naan illa di ❤️‍🩹"
-        }, {
-            time: 21,
-            text: "Kadal mannu pola un kaaloda ootti 🌺"
-        }, {
-            time: 24.5,
-            text: "Karai thaa kannaala kanne nee kalangadhe di 💕"
-        }, {
-            time: 28,
-            text: "Kannaala kanne nee kalangadhe di 🥹"
-        }, {
-            time: 31.5,
-            text: "En uyiroda aadharamaa nee thaane di 🫵🏻"
-        }, {
-            time: 35,
-            text: "Kannaala kanne nee kalangadhe di 🥹"
-        }, {
-            time: 38,
-            text: "Yaar pona enna naan iruppen di 👫🏻"
-        }];
+const lyricsData=[
+{time:0,text:"En viral irukudhu un viral kidakanum 🫴🏻"},
+{time:3.5,text:"Nasungura alavukku idhukka naan podikanum 🫂"},
+{time:7,text:"Thaan kannai thirakkaiyil un mugam theriyanum 🐒"},
+{time:10.5,text:"Uchu ulla varaikkume unakka enna podikanum 💕"},
+{time:14,text:"Kadal alai pola un kaal thotti udachi 🌊"},
+{time:17.5,text:"Kadalulla paarvai naan illa di ❤️‍🩹"},
+{time:21,text:"Kadal mannu pola un kaaloda ootti 🌺"},
+{time:24.5,text:"Karai thaa kannaala kanne nee kalangadhe di 💕"},
+{time:28,text:"Kannaala kanne nee kalangadhe di 🥹"},
+{time:31.5,text:"En uyiroda aadharamaa nee thaane di 🫵🏻"},
+{time:35,text:"Kannaala kanne nee kalangadhe di 🥹"},
+{time:38,text:"Yaar pona enna naan iruppen di 👫🏻"}
+];
 
-        let W, H, animationId, lyricInterval;
+let W,H,animationId;
+function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+resize();window.addEventListener("resize",resize);
 
-        function resize() {
-            W = c.width = window.innerWidth;
-            H = c.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener("resize", resize);
+class Particle{
+constructor(tx,ty){this.x=Math.random()*W;this.y=Math.random()*H;this.tx=tx;this.ty=ty;
+this.speed=0.02+Math.random()*0.04;this.size=1+Math.random()*1.8;
+this.color=`hsl(${Math.random()*40+330},100%,60%)`;}
+update(pulse){const cx=W/2,cy=H/2;const dx=this.tx-cx,dy=this.ty-cy;
+const txp=cx+dx*pulse,typ=cy+dy*pulse;
+this.x+=(txp-this.x)*this.speed;this.y+=(typ-this.y)*this.speed;}
+draw(){ctx.beginPath();ctx.fillStyle=this.color;
+ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}
+}
+function heartPoint(t,s){const x=s*16*Math.pow(Math.sin(t),3);
+const y=-s*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));return [x,y];}
+function generateHeartPositions(n,scale,ox,oy){
+const pts=[];for(let i=0;i<n;i++){const t=Math.random()*Math.PI*2;
+const r=0.8+Math.random()*0.3;const [x,y]=heartPoint(t,scale*r);pts.push([ox+x,oy+y]);}
+return pts;}
+function startHeartAnimation(){
+const PARTICLES=1200;const heartScale=Math.min(W,H)/(W<600?30:45);
+const heartPos=generateHeartPositions(PARTICLES,heartScale,W/2,H/2);
+const particles=heartPos.map(p=>new Particle(p[0],p[1]));let tCounter=0;
+function loop(){tCounter+=0.02;ctx.fillStyle="rgba(255,255,255,0.3)";
+ctx.fillRect(0,0,W,H);const pulse=1+0.05*Math.sin(tCounter*3);
+for(let p of particles){p.update(pulse);p.draw();}animationId=requestAnimationFrame(loop);}
+animationId=requestAnimationFrame(loop);}
+function stopHeartAnimation(){cancelAnimationFrame(animationId);c.style.opacity=0;}
 
-        class Particle {
-            constructor(tx, ty) {
-                this.x = Math.random() * W;
-                this.y = Math.random() * H;
-                this.tx = tx;
-                this.ty = ty;
-                this.speed = 0.02 + Math.random() * 0.04;
-                this.size = 1 + Math.random() * 1.8;
-                this.color = `hsl(${Math.random()*40+330},100%,60%)`;
-            }
-            update(pulse) {
-                const cx = W / 2,
-                    cy = H / 2;
-                const dx = this.tx - cx,
-                    dy = this.ty - cy;
-                const txp = cx + dx * pulse,
-                    typ = cy + dy * pulse;
-                this.x += (txp - this.x) * this.speed;
-                this.y += (typ - this.y) * this.speed;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.fillStyle = this.color;
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+function showLyric(t){
+let current="";
+for(let i=lyricsData.length-1;i>=0;i--){
+if(t>=lyricsData[i].time){current=lyricsData[i].text;break;}
+}
+if(current!==lyricBox.textContent){lyricBox.textContent=current;lyricBox.style.opacity=1;}
+if(t>lyricsData[lyricsData.length-1].time+3){lyricBox.style.opacity=0;}
+}
 
-        function heartPoint(t, s) {
-            const x = s * 16 * Math.pow(Math.sin(t), 3);
-            const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            return [x, y];
-        }
+function startPlayback(){
+playBtn.style.display="none";
+endButtons.style.display="none";
+lyricBox.textContent="";
+lyricBox.style.opacity=0;
+c.style.opacity=1;
+bgm.currentTime=0;
+startHeartAnimation();
+bgm.play().then(()=>{}).catch(()=>{console.log("user tap needed");});
+}
 
-        function generateHeartPositions(n, scale, ox, oy) {
-            const pts = [];
-            for (let i = 0; i < n; i++) {
-                const t = Math.random() * Math.PI * 2;
-                const r = 0.8 + Math.random() * 0.3;
-                const [x, y] = heartPoint(t, scale * r);
-                pts.push([ox + x, oy + y]);
-            }
-            return pts;
-        }
-
-        function startHeartAnimation() {
-            const PARTICLES = 1200;
-            const heartScale = Math.min(W, H) / (W < 600 ? 30 : 45);
-            const heartPos = generateHeartPositions(PARTICLES, heartScale, W / 2, H / 2);
-            const particles = heartPos.map(p => new Particle(p[0], p[1]));
-            let tCounter = 0;
-
-            function loop() {
-                tCounter += 0.02;
-                ctx.fillStyle = "rgba(255,255,255,0.3)";
-                ctx.fillRect(0, 0, W, H);
-                const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
-                for (let p of particles) {
-                    p.update(pulse);
-                    p.draw();
-                }
-                animationId = requestAnimationFrame(loop);
-            }
-            animationId = requestAnimationFrame(loop);
-        }
-
-        function stopHeartAnimation() {
-            cancelAnimationFrame(animationId);
-            c.style.opacity = 0;
-        }
-
-        function startLyrics() {
-            clearInterval(lyricInterval);
-            lyricInterval = setInterval(() => {
-                const t = bgm.currentTime;
-                let show = "";
-                for (let i = lyricsData.length - 1; i >= 0; i--) {
-                    if (t >= lyricsData[i].time) {
-                        show = lyricsData[i].text;
-                        break;
-                    }
-                }
-                if (show && show !== lyricBox.textContent) {
-                    lyricBox.textContent = show;
-                    lyricBox.style.opacity = 1;
-                }
-                if (t > lyricsData[lyricsData.length - 1].time + 3) {
-                    lyricBox.style.opacity = 0;
-                }
-            }, 200);
-        }
-
-        function startPlayback() {
-            playBtn.style.display = "none";
-            endButtons.style.display = "none";
-            lyricBox.textContent = "";
-            lyricBox.style.opacity = 0;
-            c.style.opacity = 1;
-            bgm.currentTime = 0;
-            startHeartAnimation();
-            bgm.play().then(() => {
-                startLyrics();
-            }).catch(() => {
-                console.log("Play blocked until user gesture");
-            });
-        }
-        bgm.onended = () => {
-            clearInterval(lyricInterval);
-            lyricBox.style.opacity = 0;
-            stopHeartAnimation();
-            setTimeout(() => {
-                endButtons.style.display = "flex";
-            }, 1000);
-        };
-        againBtn.onclick = startPlayback;
-        playBtn.addEventListener("click", startPlayback, {
-            passive: true
-        });
-        document.addEventListener("touchstart", () => {
-            window.focus();
-            if (bgm.paused) startPlayback();
-        }, {
-            once: true,
-            passive: true
-        });
-    </script>
+bgm.addEventListener("timeupdate",()=>{showLyric(bgm.currentTime);});
+bgm.onended=()=>{lyricBox.style.opacity=0;stopHeartAnimation();
+setTimeout(()=>{endButtons.style.display="flex";},1000);};
+againBtn.onclick=startPlayback;
+playBtn.addEventListener("click",startPlayback,{passive:true});
+document.addEventListener("touchstart",()=>{if(bgm.paused)startPlayback();},{once:true,passive:true});
+</script>
 </body>
-
 </html>
