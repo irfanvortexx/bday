@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Happy Birthday Shahana 💕</title>
+    <title>💕</title>
     <style>
         html,
         body {
@@ -41,11 +41,10 @@
             text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff4fa3, 0 0 60px #d63b8c;
             color: #ff1a75;
             opacity: 0;
-            transition: opacity 1s;
+            transition: opacity 0.8s;
             width: 75%;
             max-width: 480px;
             pointer-events: none;
-            filter: drop-shadow(0 0 8px #ff66b2);
         }
         
         #endButtons {
@@ -55,48 +54,59 @@
             transform: translate(-50%, -50%);
             display: none;
             flex-direction: row;
-            gap: 15px;
+            gap: 20px;
         }
         
-        button {
-            padding: 12px 26px;
+        .endBtn {
+            padding: 14px 30px;
             font-size: 18px;
             border: none;
             border-radius: 10px;
-            background: #ff7ab5;
+            background: linear-gradient(135deg, #ff7ab5, #ff3ea6);
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 0 15px #ff7ab5;
+            box-shadow: 0 0 20px #ff7ab5;
             transition: .3s;
+            font-family: "Segoe Script", cursive;
         }
         
-        button:hover {
-            background: #ff3ea6;
-            box-shadow: 0 0 25px #ff3ea6;
+        .endBtn:hover {
+            background: linear-gradient(135deg, #ff3ea6, #ff1a75);
+            box-shadow: 0 0 30px #ff3ea6;
+            transform: scale(1.05);
         }
         
-        #tapStart {
+        #playBtn {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: clamp(18px, 5vw, 28px);
-            color: #ff1a75;
-            text-shadow: 0 0 20px #ff99cc;
+            padding: clamp(10px, 3vw, 20px) clamp(25px, 6vw, 50px);
+            font-size: clamp(16px, 4vw, 26px);
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff7ab5, #ff3ea6);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 30px #ff7ab5;
+            transition: .3s;
+            font-family: "Segoe Script", cursive;
             animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+        #playBtn:hover {
+            background: linear-gradient(135deg, #ff3ea6, #ff1a75);
+            box-shadow: 0 0 40px #ff3ea6;
+            transform: translate(-50%, -50%) scale(1.05);
         }
         
-        @media (max-width: 600px) {
-            #title {
-                font-size: 28px;
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
             }
-            #startBtn {
-                font-size: 16px;
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
             }
         }
     </style>
@@ -107,10 +117,9 @@
         <canvas id="c"></canvas>
         <div id="lyrics"></div>
         <div id="endButtons">
-            <button id="againBtn">Start Again 🔁</button>
-            <button id="nextBtn">Next 💖</button>
+            <button class="endBtn" id="againBtn">Start Again 🔁</button>
         </div>
-        <div id="tapStart">Tap anywhere to start music 🎵</div>
+        <button id="playBtn">Play 🎵</button>
     </div>
 
     <audio id="bgm" src="song.mp3" preload="auto"></audio>
@@ -118,14 +127,12 @@
     <script>
         const bgm = document.getElementById("bgm");
         const c = document.getElementById("c");
-        const ctx = c.getContext("2d", {
-            alpha: true
-        });
+        const ctx = c.getContext("2d");
         const lyricBox = document.getElementById("lyrics");
         const againBtn = document.getElementById("againBtn");
         const nextBtn = document.getElementById("nextBtn");
         const endButtons = document.getElementById("endButtons");
-        const tapStart = document.getElementById("tapStart");
+        const playBtn = document.getElementById("playBtn");
 
         const lyricsData = [{
             time: 0,
@@ -165,8 +172,7 @@
             text: "Yaar pona enna naan iruppen di 👫🏻"
         }];
 
-
-        let W, H, animationId;
+        let W, H, animationId, lyricInterval;
 
         function resize() {
             W = c.width = window.innerWidth;
@@ -183,7 +189,7 @@
                 this.ty = ty;
                 this.speed = 0.02 + Math.random() * 0.04;
                 this.size = 1 + Math.random() * 1.8;
-                this.color = `hsl(${Math.random()*40+330},100%,60%)`;
+                this.color = `hsl(${Math.random() * 40 + 330},100%,60%)`;
             }
             update(pulse) {
                 const cx = W / 2,
@@ -227,17 +233,17 @@
             const particles = heartPos.map(p => new Particle(p[0], p[1]));
             let tCounter = 0;
 
-        function loop() {
-            tCounter += 0.02;
-            ctx.fillStyle = "rgba(255,255,255,0.3)";
-            ctx.fillRect(0, 0, W, H);
-            const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
-            for (let p of particles) {
-                p.update(pulse);
-                p.draw();
+            function loop() {
+                tCounter += 0.02;
+                ctx.fillStyle = "rgba(255,255,255,0.3)";
+                ctx.fillRect(0, 0, W, H);
+                const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
+                for (let p of particles) {
+                    p.update(pulse);
+                    p.draw();
+                }
+                animationId = requestAnimationFrame(loop);
             }
-            animationId = requestAnimationFrame(loop);
-        }
             animationId = requestAnimationFrame(loop);
         }
 
@@ -246,73 +252,58 @@
             c.style.opacity = 0;
         }
 
+        function startLyrics() {
+            let currentIndex = -1;
+            clearInterval(lyricInterval);
+            lyricInterval = setInterval(() => {
+                const t = bgm.currentTime;
+                let show = "";
+                for (let i = lyricsData.length - 1; i >= 0; i--) {
+                    if (t >= lyricsData[i].time) {
+                        show = lyricsData[i].text;
+                        break;
+                    }
+                }
+                if (show && show !== lyricBox.textContent) {
+                    lyricBox.textContent = show;
+                    lyricBox.style.opacity = 1;
+                }
+                if (t > lyricsData[lyricsData.length - 1].time + 3) {
+                    lyricBox.style.opacity = 0;
+                }
+            }, 200);
+        }
+
         function startPlayback() {
-            tapStart.style.display = "none";
+            playBtn.style.display = "none";
+            endButtons.style.display = "none";
+            lyricBox.textContent = "";
+            lyricBox.style.opacity = 0;
             c.style.opacity = 1;
             bgm.currentTime = 0;
-            
-            // Start animation first
             startHeartAnimation();
-            
-            // Then play audio
-            bgm.play().catch(err => {
-                console.log("Playback failed:", err);
-            });
+            bgm.play();
+            startLyrics();
         }
 
         bgm.onended = () => {
+            clearInterval(lyricInterval);
             lyricBox.style.opacity = 0;
             stopHeartAnimation();
             setTimeout(() => {
                 endButtons.style.display = "flex";
             }, 1000);
         };
-            const t = bgm.currentTime;
-            let current = "";
-            for (let i = lyricsData.length - 1; i >= 0; i--) {
-                if (t >= lyricsData[i].time) {
-                    current = lyricsData[i].text;
-                    break;
-                }
-            }
-            if (current !== lyricBox.textContent) {
-                lyricBox.textContent = current;
-                lyricBox.style.opacity = current ? 1 : 0;
-            }
-        };
-        
+
         againBtn.onclick = () => {
-            endButtons.style.display = "none";
-            lyricBox.textContent = "";
             startPlayback();
         };
-        
+
         nextBtn.onclick = () => {
             window.location.href = "level2.html";
         };
 
-        // Handle both desktop and mobile interaction
-        function initInteraction() {
-            tapStart.style.display = "block";
-            
-            function handleInteraction(e) {
-                e.preventDefault();
-                startPlayback();
-                document.body.removeEventListener("click", handleInteraction);
-                document.body.removeEventListener("touchstart", handleInteraction);
-            }
-            
-            document.body.addEventListener("click", handleInteraction);
-            document.body.addEventListener("touchstart", handleInteraction);
-        }
-        
-        // Try autoplay first, fallback to tap-to-play
-        bgm.play().then(() => {
-            tapStart.style.display = "none";
-            startHeartAnimation();
-        }).catch(() => {
-            initInteraction();
-        });
+        playBtn.addEventListener("click", startPlayback);
     </script>
 </body>
 
