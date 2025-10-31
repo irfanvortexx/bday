@@ -125,13 +125,15 @@
     <audio id="bgm" src="song.mp3" preload="auto"></audio>
 
     <script>
-        const bgm = document.getElementById("bgm");
-        const c = document.getElementById("c"),
-            ctx = c.getContext("2d");
-        const lyricBox = document.getElementById("lyrics");
-        const againBtn = document.getElementById("againBtn");
-        const endButtons = document.getElementById("endButtons");
-        const playBtn = document.getElementById("playBtn");
+        const startBtn = document.getElementById('startBtn');
+        const intro = document.getElementById('intro');
+        const main = document.getElementById('main');
+        const bgm = document.getElementById('bgm');
+        const lyricBox = document.getElementById('lyrics');
+        const canvas = document.getElementById('c');
+        const endButtons = document.getElementById('endButtons');
+        const restartBtn = document.getElementById('restartBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
         const lyricsData = [{
             time: 0,
@@ -171,87 +173,101 @@
             text: "Yaar pona enna naan iruppen di 👫🏻"
         }];
 
-        let W, H, animationId;
+        startBtn.onclick = () => {
+            intro.style.display = 'none';
+            main.style.display = 'block';
+            bgm.currentTime = 0;
+            bgm.play().catch(() => alert("Click anywhere to allow audio"));
+            startAnimation();
+        };
 
-        function resize() {
-            W = c.width = window.innerWidth;
-            H = c.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener("resize", resize);
+        restartBtn.onclick = () => {
+            endButtons.style.display = 'none';
+            canvas.style.opacity = 1;
+            lyricBox.textContent = '';
+            lyricBox.style.opacity = 0;
+            bgm.currentTime = 0;
+            bgm.play();
+        };
 
-        class Particle {
-            constructor(tx, ty) {
-                this.x = Math.random() * W;
-                this.y = Math.random() * H;
-                this.tx = tx;
-                this.ty = ty;
-                this.speed = 0.02 + Math.random() * 0.04;
-                this.size = 1 + Math.random() * 1.8;
-                this.color = `hsl(${Math.random()*40+330},100%,60%)`;
+        nextBtn.onclick = () => {
+            alert("Next section loading... (implement navigation here)");
+        };
+
+        function startAnimation() {
+            const ctx = canvas.getContext('2d');
+            let W = canvas.width = window.innerWidth;
+            let H = canvas.height = window.innerHeight;
+            const PARTICLES = 900;
+
+            function heartPoint(t, s) {
+                const x = s * 16 * Math.pow(Math.sin(t), 3);
+                const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+                return [x, y];
             }
-            update(pulse) {
-                const cx = W / 2,
-                    cy = H / 2;
-                const dx = this.tx - cx,
-                    dy = this.ty - cy;
-                const txp = cx + dx * pulse,
-                    typ = cy + dy * pulse;
-                this.x += (txp - this.x) * this.speed;
-                this.y += (typ - this.y) * this.speed;
+
+            function generateHeartPositions(n, scale, ox, oy) {
+                const pts = [];
+                for (let i = 0; i < n; i++) {
+                    const t = Math.random() * Math.PI * 2;
+                    const r = 0.7 + Math.random() * 0.3;
+                    const [x, y] = heartPoint(t, scale * r);
+                    pts.push([ox + x, oy + y]);
+                }
+                return pts;
             }
-            draw() {
-                ctx.beginPath();
-                ctx.fillStyle = this.color;
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+
+            class Particle {
+                constructor(target) {
+                    this.x = Math.random() * W;
+                    this.y = Math.random() * H;
+                    this.tx = target[0];
+                    this.ty = target[1];
+                    this.speed = 0.02 + Math.random() * 0.04;
+                    this.size = 1 + Math.random() * 2;
+                }
+                update(pulse) {
+                    const cx = W / 2,
+                        cy = H / 2;
+                    const dx = this.tx - cx,
+                        dy = this.ty - cy;
+                    const txp = cx + dx * pulse,
+                        typ = cy + dy * pulse;
+                    this.x += (txp - this.x) * this.speed;
+                    this.y += (typ - this.y) * this.speed;
+                }
+                draw(a) {
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(255,120,190,${a / 255})`;
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
-        }
 
-        function heartPoint(t, s) {
-            const x = s * 16 * Math.pow(Math.sin(t), 3);
-            const y = -s * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-            return [x, y];
-        }
+            const heartPos = generateHeartPositions(PARTICLES, Math.min(W, H) / 45, W / 2, H / 2);
+            const particles = heartPos.map(p => new Particle(p));
 
-        function generateHeartPositions(n, scale, ox, oy) {
-            const pts = [];
-            for (let i = 0; i < n; i++) {
-                const t = Math.random() * Math.PI * 2;
-                const r = 0.8 + Math.random() * 0.3;
-                const [x, y] = heartPoint(t, scale * r);
-                pts.push([ox + x, oy + y]);
-            }
-            return pts;
-        }
+            let fadeAlpha = 255,
+                tCounter = 0;
 
-        function startHeartAnimation() {
-            const PARTICLES = 1200;
-            const heartScale = Math.min(W, H) / (W < 600 ? 30 : 45);
-            const heartPos = generateHeartPositions(PARTICLES, heartScale, W / 2, H / 2);
-            const particles = heartPos.map(p => new Particle(p[0], p[1]));
-            let tCounter = 0;
-
-            function loop() {
-                tCounter += 0.02;
-                ctx.fillStyle = "rgba(255,255,255,0.3)";
+            function loop(now) {
+                const dt = now - (loop.last || now);
+                loop.last = now;
+                tCounter += dt * 0.001;
+                ctx.fillStyle = "rgba(255,240,245,0.5)";
                 ctx.fillRect(0, 0, W, H);
-                const pulse = 1 + 0.05 * Math.sin(tCounter * 3);
+                const pulse = 1 + 0.05 * Math.sin(tCounter * 2.5);
                 for (let p of particles) {
                     p.update(pulse);
-                    p.draw();
+                    p.draw(fadeAlpha);
                 }
-                animationId = requestAnimationFrame(loop);
+                requestAnimationFrame(loop);
             }
-            animationId = requestAnimationFrame(loop);
+            requestAnimationFrame(loop);
         }
 
-        function stopHeartAnimation() {
-            cancelAnimationFrame(animationId);
-            c.style.opacity = 0;
-        }
-
-        function showLyric(t) {
+        bgm.ontimeupdate = () => {
+            const t = bgm.currentTime;
             let current = "";
             for (let i = lyricsData.length - 1; i >= 0; i--) {
                 if (t >= lyricsData[i].time) {
@@ -261,46 +277,17 @@
             }
             if (current !== lyricBox.textContent) {
                 lyricBox.textContent = current;
-                lyricBox.style.opacity = 1;
+                lyricBox.style.opacity = current ? 1 : 0;
             }
-            if (t > lyricsData[lyricsData.length - 1].time + 3) {
-                lyricBox.style.opacity = 0;
-            }
-        }
-
-        function startPlayback() {
-            playBtn.style.display = "none";
-            endButtons.style.display = "none";
-            lyricBox.textContent = "";
-            lyricBox.style.opacity = 0;
-            c.style.opacity = 1;
-            bgm.currentTime = 0;
-            startHeartAnimation();
-            bgm.play().then(() => {}).catch(() => {
-                console.log("user tap needed");
-            });
-        }
-
-        bgm.addEventListener("timeupdate", () => {
-            showLyric(bgm.currentTime);
-        });
-        bgm.onended = () => {
-            lyricBox.style.opacity = 0;
-            stopHeartAnimation();
-            setTimeout(() => {
-                endButtons.style.display = "flex";
-            }, 1000);
         };
-        againBtn.onclick = startPlayback;
-        playBtn.addEventListener("click", startPlayback, {
-            passive: true
-        });
-        document.addEventListener("touchstart", () => {
-            if (bgm.paused) startPlayback();
-        }, {
-            once: true,
-            passive: true
-        });
+
+        bgm.onended = () => {
+            canvas.style.opacity = 0;
+            lyricBox.style.opacity = 0;
+            setTimeout(() => {
+                endButtons.style.display = 'flex';
+            }, 1200);
+        };
     </script>
 </body>
 
